@@ -2,20 +2,18 @@ import axios from "axios";
 import React, { useState } from "react";
 
 function FetchApi() {
-  /* const fetchapi = () => {
-    console.log("click");
-  };*/
-
   const [news, SetNews] = useState([]);
 
   const fetchapi = () => {
     axios
       .get(
-        "https://newsapi.org/v2/top-headlines?country=in&apiKey=81de9a8c1ec34c58bb679395b8b295d9"
+        "https://api.tvmaze.com/search/shows?q=all"
       )
-      .then((response) => {
-        console.log(response);
-        SetNews(response.data.articles);
+      .then(({ data }) => {
+        console.log(data);
+        SetNews(data);
+        localStorage.setItem('key', JSON.stringify(data));
+
       });
   };
   return (
@@ -31,21 +29,19 @@ function FetchApi() {
       </div>
       <div ClassName="container">
         <div ClassName="row">
-          {news.map((value) => {
+          {news.map(({ show }, i) => {
             return (
               <div ClassName="col-4">
                 <div ClassName="card" style={{ width: "18rem;" }}>
                   <img
-                    src={value.urlToImage}
+                    src={show.image.medium}
                     ClassName="card-img-top"
                     alt="..."
                   />
                   <div ClassName="card-body">
-                    <h5 ClassName="card-title">{value.title}</h5>
-                    <p ClassName="card-text">{value.description}</p>
-                    <a href="#" ClassName="btn btn-primary">
-                      {value.url}
-                    </a>
+                    <h5 ClassName="card-title">{show.name
+                    }</h5>
+
                   </div>
                 </div>
               </div>
@@ -56,11 +52,5 @@ function FetchApi() {
     </>
   );
 }
-/*news.map((value) => {
-  return (
-    <div>
-      <h1>{value.title}</h1>
-    </div>
-  );
-});*/
+
 export default FetchApi;
